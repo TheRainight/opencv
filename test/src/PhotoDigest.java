@@ -20,25 +20,25 @@ public class PhotoDigest {
         }
         return fileList;
     }
-            public static void main(String[] args) throws Exception {
-                List<String> list = PhotoDigest.getFilesPath("G:\\opencv\\img1");//人脸目录
-                int i = 1;
-                System.out.println("正在识别中...");
-                for (String str : list) {
+            // public static void main(String[] args) throws Exception {
+            //     List<String> list = PhotoDigest.getFilesPath("G:\\opencv\\img1");//人脸目录
+            //     int i = 1;
+            //     System.out.println("正在识别中...");
+            //     for (String str : list) {
 
-                    System.out.println("第" + i++ + "张");
-                    float percent = compare(getData("G:\\opencv\\img\\0.png"),//拍的照片
-                            getData(str));
-                    System.out.println("两张图片的相似度为：" + percent + "%");
-                    if (percent>=75) {
-                        System.out.println("签到成功");
-                        break;
-                    }
-                    if(i>37){
-                        System.out.println("签到失败");
-                    }
-                }
-            }
+            //         System.out.println("第" + i++ + "张");
+            //         float percent = compare(getData("G:\\opencv\\img\\0.png"),//拍的照片
+            //                 getData(str));
+            //         System.out.println("两张图片的相似度为：" + percent + "%");
+            //         if (percent>=75) {
+            //             System.out.println("签到成功");
+            //             break;
+            //         }
+            //         if(i>37){
+            //             System.out.println("签到失败");
+            //         }
+            //     }
+            // }
 
             public static int[] getData(String name) {
                 try {
