@@ -1,6 +1,8 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Graphics;
+import org.opencv.objdetect.CascadeClassifier;
+import org.opencv.imgcodecs.Imgcodecs;
 import java.awt.image.BufferedImage;
 public class CaptureBasic extends JPanel {
     private BufferedImage mImg;
@@ -31,4 +33,43 @@ public class CaptureBasic extends JPanel {
             g.drawImage(mImg, 0, 0, mImg.getWidth(),mImg.getHeight(),this);
         }
     }
+/**
+     * opencv实现人脸识别
+     * @param img
+     */
+    public static Mat detectFace(Mat img)
+    {
+        System.out.println("正在扫描脸部信息... ");
+        // 从配置文件lbpcascade_frontalface.xml中创建一个人脸识别器，该文件位于opencv安装目录中
+        CascadeClassifier faceDetector = new CascadeClassifier("G:\\opencv\\sources\\data\\haarcascades\\haarcascade_frontalface_alt.xml");
+
+
+        // 在图片中检测人脸
+        MatOfRect faceDetections = new MatOfRect();
+
+        faceDetector.detectMultiScale(img, faceDetections);
+
+        //System.out.println(String.format("Detected %s faces", faceDetections.toArray().length));//扫描到的脸部的数量
+
+        Rect[] rects = faceDetections.toArray();//将人脸转换为数组形式
+
+        if(rects != null && rects.length >= 1){
+            for(int i = 0 ; i < rects.length ; i++){
+                Rect rect = rects[i];
+                Imgproc.rectangle(img, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
+                        new Scalar(0, 0, 255), 2);//扫描脸部时的框的设置（颜色及宽度）
+                Mat sub = img.submat(rects[i]);//Mat sub = new Mat(image,rect);
+                Mat mat = new Mat();
+                Size size = new Size(300, 300);//人脸框的标准大小
+                System.out.println("已检测到人脸，正在截取中...");
+                a=true;
+                Imgproc.resize(sub, mat, size);//将人脸进行截图并保存 
+                Imgcodecs.imwrite("G:\\opencv\\img\\0.png", mat);//将扫描到的脸部截取存储
+                System.out.println("人脸截取成功，正在匹配中...");
+
+            }
+        }
+        return img;
+    }
+}
 }
