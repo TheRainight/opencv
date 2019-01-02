@@ -1,13 +1,18 @@
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import java.awt.Graphics;
-import org.opencv.objdetect.CascadeClassifier;
-import org.opencv.imgcodecs.Imgcodecs;
-import java.awt.image.BufferedImage;
 import javax.swing.WindowConstants;
+import org.opencv.core.*;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
-public class CaptureBasic extends JPanel {
+
+public class CaptureBasic extends JPanel {//JPanel 是 Java图形用户界面(GUI)工具包swing中的面板容器类
+    static boolean  a=false;//设置结束拍照的标志
     private BufferedImage mImg;
     private BufferedImage mat2BI(Mat mat){                        //将图片转换为灰度图片
         int dataSize =mat.cols()*mat.rows()*(int)mat.elemSize();
@@ -36,7 +41,8 @@ public class CaptureBasic extends JPanel {
             g.drawImage(mImg, 0, 0, mImg.getWidth(),mImg.getHeight(),this);
         }
     }
-public static void main(String[] args) {//开始实例化
+
+    public static void main(String[] args) {//开始实例化
         try{                                                                  //调用相机
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
@@ -66,6 +72,22 @@ public static void main(String[] args) {//开始实例化
                 //循环拍照
                 if(a) {//拍照停止的条件 如果a==true
                        frame.dispose();//关闭窗体
+                       System.loadLibrary(Core.NATIVE_LIBRARY_NAME);//System.loadLibrary()的作用是载入opencv库
+                List<String> list = PhotoDigest.getFilesPath("G:\\opencv\\img1");//图片目录
+                int i = 1;
+               // System.out.println("正在识别中...");
+                for (String str : list) {
+                    System.out.println("第" + i++ + "张");
+                    float percent = PhotoDigest.compare(PhotoDigest.getData("G:\\opencv\\img\\0.png"),//拍的照片
+                            PhotoDigest.getData(str));
+                    System.out.println("两张图片的相似度为：" + percent + "%");
+                    if (percent>=60) {//相似度大于60%，就签到成功
+                        System.out.println("签到成功");
+                        break;
+                    }
+                    if(i>37)//图片共用37张
+                          System.out.println("签到失败");
+                }
 }
     }
         }catch(Exception e){
@@ -76,8 +98,7 @@ public static void main(String[] args) {//开始实例化
 
 
     }
-
-/**
+    /**
      * opencv实现人脸识别
      * @param img
      */
@@ -114,6 +135,6 @@ public static void main(String[] args) {//开始实例化
             }
         }
         return img;
+
     }
-}
 }
