@@ -70,7 +70,7 @@ public class CaptureBasic extends JPanel {//JPanel 是 Java图形用户界面(GU
                 panel.mImg=panel.mat2BI(detectFace(capImg));
                 panel.repaint();
                 //循环拍照
-              if (a) {//拍照停止的条件 如果a==true
+                if (a) {//拍照停止的条件 如果a==true
                 frame.dispose();//关闭窗体
 
                 //百度人脸对比API
@@ -89,11 +89,31 @@ public class CaptureBasic extends JPanel {//JPanel 是 Java图形用户界面(GU
                     if (count > 36)//照片总数为36张
                         System.out.println("签到失败,未找到匹配的人脸信息");
                 }
-}
-    }
-        }catch(Exception e){
+            }
+            }
+
+
+//              /*     Opencv API*/
+//               System.loadLibrary(Core.NATIVE_LIBRARY_NAME);//System.loadLibrary()的作用是载入opencv库
+//                List<String> list = PhotoDigest.getFilesPath("G:\\opencv\\img1");//图片目录
+//                int i = 1;
+//               // System.out.println("正在识别中...");
+//                for (String str : list) {
+//                    System.out.println("第" + i++ + "张");
+//                    float percent = PhotoDigest.compare(PhotoDigest.getData("G:\\opencv\\img\\0.png"),//拍的照片
+//                            PhotoDigest.getData(str));
+//                    System.out.println("两张图片的相似度为：" + percent + "%");
+//                    if (percent>=60) {//相似度大于60%，就签到成功
+//                        System.out.println("签到成功");
+//                        break;
+//                    }
+//                    if(i>37)//图片共用37张
+//                          System.out.println("签到失败");
+//                }
+
+        } catch (Exception e) {
             System.out.println("出现错误：" + e);
-        }finally{
+        } finally {
 
         }
 
