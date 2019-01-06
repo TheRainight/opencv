@@ -70,23 +70,24 @@ public class CaptureBasic extends JPanel {//JPanel 是 Java图形用户界面(GU
                 panel.mImg=panel.mat2BI(detectFace(capImg));
                 panel.repaint();
                 //循环拍照
-                if(a) {//拍照停止的条件 如果a==true
-                       frame.dispose();//关闭窗体
-                       System.loadLibrary(Core.NATIVE_LIBRARY_NAME);//System.loadLibrary()的作用是载入opencv库
-                List<String> list = PhotoDigest.getFilesPath("G:\\opencv\\img1");//图片目录
-                int i = 1;
-               // System.out.println("正在识别中...");
+              if (a) {//拍照停止的条件 如果a==true
+                frame.dispose();//关闭窗体
+
+                //百度人脸对比API
+                System.out.println("正在识别中...");
+                List<String> list = FaceMatch.getFilesPath("G:\\opencv\\img1");
+                int count = 1;
                 for (String str : list) {
-                    System.out.println("第" + i++ + "张");
-                    float percent = PhotoDigest.compare(PhotoDigest.getData("G:\\opencv\\img\\0.png"),//拍的照片
-                            PhotoDigest.getData(str));
-                    System.out.println("两张图片的相似度为：" + percent + "%");
-                    if (percent>=60) {//相似度大于60%，就签到成功
-                        System.out.println("签到成功");
+                    //  System.out.println("第" + count++ + "张");
+                    FaceMatch.match(str, "G:\\opencv\\img\\0.png");
+                    if (FaceMatch.s >= 85) {
+                        String reg = "[^\u4e00-\u9fa5]";
+                        System.out.println(str.replaceAll(reg, "") + "签到成功");
+                        System.out.println("照片相似度为："+FaceMatch.s+"%");
                         break;
                     }
-                    if(i>37)//图片共用37张
-                          System.out.println("签到失败");
+                    if (count > 36)//照片总数为36张
+                        System.out.println("签到失败,未找到匹配的人脸信息");
                 }
 }
     }
